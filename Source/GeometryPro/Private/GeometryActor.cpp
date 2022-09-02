@@ -23,11 +23,11 @@ void AGeometryActor::BeginPlay()
 	// StartLoad();
 }
 
-void AGeometryActor::StartLoad(const TArray<FString>& InPaths)
+void AGeometryActor::StartLoad(const TArray<FString>& InIndexes)
 {
 	//StaticMesh'/Game/Geometries/meshId4057_name.meshId4057_name'
 	TArray<FString> Paths;
-	for (FString Index : InPaths){
+	for (FString Index : InIndexes){
 	
 		Paths.Add(FString(GEOMETRIES_PATH_1)
 			+ FString("meshId")

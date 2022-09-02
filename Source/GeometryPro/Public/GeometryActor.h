@@ -8,7 +8,7 @@
 #include "GeometryActor.generated.h"
 
 UCLASS()
-class GEOMETRYPRO_API AGeometryActor : public AActor
+class AGeometryActor : public AActor
 {
 	GENERATED_BODY()
 
@@ -16,6 +16,7 @@ public:
 	// Sets default values for this actor's properties
 	AGeometryActor();
 
+	//调用此函数，进行加载模型
 	UFUNCTION(BlueprintCallable)
 	void StartLoad(const TArray<FString>& Paths);
 protected:
@@ -27,7 +28,7 @@ protected:
 	UFUNCTION()
 	void LoadGeometriesComplete();
 
-	void SetAssetsPaths(const TArray<FString>& Paths);
+	void SetAssetsPaths(const TArray<FString>& InIndexes);
 
 protected:
 	TSharedPtr<FStreamableHandle> GeometryHandle;
