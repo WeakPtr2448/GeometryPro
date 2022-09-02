@@ -34,8 +34,6 @@ protected:
 
 	FStreamableManager* GeometryManager;
 
-	UPROPERTY(EditAnywhere)
-	UMaterialInterface* MaterialInterface;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

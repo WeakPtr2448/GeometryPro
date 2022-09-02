@@ -5,7 +5,6 @@
 
 #include "Engine/ObjectLibrary.h"
 
-//Geometries
 #define GEOMETRIES_PATH "/Game/2D/Geometries"
 #define GEOMETRIES_PATH_1 "StaticMesh'/Game/2D/Geometries/"
 
@@ -77,7 +76,6 @@ void AGeometryActor::LoadGeometriesComplete()
 	GeometryHandle->GetLoadedAssets(LoadedMeshes);
 
 	FTransform Transform = FTransform();
-	// int32 Index;
 	for (int i = 0; i < LoadedMeshes.Num(); ++i)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("模型为: %s"), *LoadedMeshes[i]->GetFName().ToString());
