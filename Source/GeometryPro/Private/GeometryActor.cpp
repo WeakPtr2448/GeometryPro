@@ -23,6 +23,18 @@ void AGeometryActor::BeginPlay()
 	// StartLoad();
 }
 
+void AGeometryActor::Start()
+{
+	// FTestableRunnable* th1 = new FTestableRunnable(this);
+	// FTestableRunnable* th2 = new FTestableRunnable(this);
+	// FTestableRunnable* th3 = new FTestableRunnable(this);
+	// FTestableRunnable* th4 = new FTestableRunnable(this);
+	// FRunnableThread* RunnableThread_1 = FRunnableThread::Create(th1,TEXT("线程1"));
+	// FRunnableThread* RunnableThread_2 = FRunnableThread::Create(th2,TEXT("线程2"));
+	// FRunnableThread* RunnableThread_3 = FRunnableThread::Create(th3,TEXT("线程3"));
+	// FRunnableThread* RunnableThread_4 = FRunnableThread::Create(th4,TEXT("线程4"));
+}
+
 void AGeometryActor::StartLoad(const TArray<FString>& InIndexes)
 {
 	//StaticMesh'/Game/Geometries/meshId4057_name.meshId4057_name'
@@ -42,10 +54,10 @@ void AGeometryActor::StartLoad(const TArray<FString>& InIndexes)
 		UE_LOG(LogTemp, Log, TEXT("%s"), *Path);
 	}
 	SetAssetsPaths(Paths);
-	GeometryManager = new FStreamableManager();
+	/*GeometryManager = new FStreamableManager();
 	GeometryHandle = GeometryManager->RequestAsyncLoad(GeometryPaths,
 	                                                   FStreamableDelegate::CreateUObject(
-		                                                   this, &AGeometryActor::LoadGeometriesComplete));
+		                                                   this, &AGeometryActor::LoadGeometriesComplete));*/
 }
 
 void AGeometryActor::SetAssetsPaths(const TArray<FString>& Paths)
@@ -73,7 +85,8 @@ void AGeometryActor::SetAssetsPaths(const TArray<FString>& Paths)
 void AGeometryActor::LoadGeometriesComplete()
 {
 	TArray<UObject*> LoadedMeshes;
-	GeometryHandle->GetLoadedAssets(LoadedMeshes);
+	// GeometryHandle->GetLoadedAssets(LoadedMeshes);
+	// LoadedMeshes.Append(UAsycLoadMeshesBPLibrary::GetLoadedMeshes());
 
 	FTransform Transform = FTransform();
 	for (int i = 0; i < LoadedMeshes.Num(); ++i)

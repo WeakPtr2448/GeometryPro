@@ -19,9 +19,6 @@ public:
 	//调用此函数，进行加载模型
 	UFUNCTION(BlueprintCallable)
 	void StartLoad(const TArray<FString>& Paths);
-protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	class UStaticMeshComponent* GeometryComp;
 
 	TArray<FStringAssetReference> GeometryPaths;
 
@@ -38,6 +35,9 @@ protected:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintCallable)
+	void Start();
 
 public:
 	// Called every frame

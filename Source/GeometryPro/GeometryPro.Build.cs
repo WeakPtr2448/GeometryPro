@@ -8,7 +8,7 @@ public class GeometryPro : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore","AsycLoadMeshes"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
