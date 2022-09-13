@@ -9,16 +9,12 @@ ULoadMeshesAsyncAction* ULoadMeshesAsyncAction::WaitForLoadMeshes(UObject* World
 {
 	ULoadMeshesAsyncAction* Node = NewObject<ULoadMeshesAsyncAction>();
 	(new FAutoDeleteAsyncTask<FLoadMeshesTask>(Node, InPath, Indexes, Indepthes))->StartBackgroundTask();
-	GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Yellow, TEXT(__FUNCTION__));
 	return Node;
 }
 
 void FLoadMeshesTask::DoWork()
 {
 	//StaticMesh'/Game/Geometries/meshId4057_name.meshId4057_name'
-
-	GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Red, TEXT(__FUNCTION__));
-	GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Red, *FString::FromInt(Indexes[0]));
 	AsyncTask(ENamedThreads::GameThread, [this]()
 	{
 		// TArray<int32> CurrentIndexes;
@@ -40,19 +36,13 @@ void FLoadMeshesTask::DoWork()
 		{
 			const TCHAR* charFile = *Paths[i];
 			// // char* file = TCHAR_TO_UTF8(charFile);
-			//
-			// UE_LOG(LogTemp, Warning, TEXT("@%u ,Path: %s"), __LINE__, charFile);
 
 			UE_LOG(LogTemp, Warning, TEXT("@%u ,PathName=%s"), __LINE__,
 			       charFile);
-			GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, charFile);
-			// UE_LOG(LogTemp, Warning, TEXT("@%u ,Counter=%d"), __LINE__, TargetCounter);
 			if (i > 1)
 			{
 				LoadedMesh = LoadObject<UStaticMesh>(NULL, charFile);
-				
-				// GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Blue, *Node->GetFName().ToString());
-				Node->OnSuccess.Broadcast(LoadedMesh, Depth);
+				Node->OnSuccess.Broadcast(LoadedMesh, Depths[i]);
 			}
 			if (i == Paths.Num())
 			{
@@ -62,13 +52,3 @@ void FLoadMeshesTask::DoWork()
 		Node->OnFailed.Broadcast(nullptr, {});
 	});
 }
-
-// Node->OnSuccess.Broadcast(LoadedMesh, Depths);
-
-// FPlatformProcess::Sleep(0.01f);
-
-// AsyncTask(ENamedThreads::GameThread, [=]()
-// {
-// 	UE_LOG(LogTemp, Warning, TEXT("@%u ,Counter=%d"), __LINE__, TargetCounter);
-// 	Node->OnFailed.Broadcast({}, {});
-// });

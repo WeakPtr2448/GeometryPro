@@ -43,12 +43,12 @@ class FLoadMeshesTask : public FNonAbandonableTask
 	FString MeshPath;
 	TArray<FString> Paths;
 	
-	float Depth;
+	TArray<float> Depths;
 	UStaticMesh* LoadedMesh;
 
 
-	FLoadMeshesTask(ULoadMeshesAsyncAction* InNode, FString InPath, TArray<int32> InIndexes, float Indepth):
-		Node(InNode), Indexes(InIndexes), MeshPath(InPath), Depth(Indepth)
+	FLoadMeshesTask(ULoadMeshesAsyncAction* InNode, FString InPath, TArray<int32> InIndexes, TArray<float> Indepths):
+		Node(InNode), Indexes(InIndexes), MeshPath(InPath), Depths(Indepths)
 	{
 	}
 
