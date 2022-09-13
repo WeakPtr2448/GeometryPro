@@ -7,8 +7,8 @@
 #include "LoadMeshesAsyncAction.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnLoadingSignature,
-                                             const TArray<UStaticMesh*>&, RiverMeshes,
-                                             const TArray<float>&, Depths);
+                                             UStaticMesh*, RiverMesh,
+                                             float, Depths);
 
 /**
  * 
@@ -30,6 +30,7 @@ public:
 	                                                 FString InPath,
 	                                                 TArray<int32> Indexes,
 	                                                 TArray<float> Indepths);
+	
 };
 
 class FLoadMeshesTask : public FNonAbandonableTask
@@ -40,13 +41,14 @@ class FLoadMeshesTask : public FNonAbandonableTask
 	ULoadMeshesAsyncAction* Node;
 	TArray<int32> Indexes;
 	FString MeshPath;
-	TArray<float> Depths;
+	TArray<FString> Paths;
+	
+	float Depth;
+	UStaticMesh* LoadedMesh;
 
-	int32 TargetCounter;
 
-
-	FLoadMeshesTask(ULoadMeshesAsyncAction* InNode, FString InPath, TArray<int32> InIndexes, TArray<float> Indepths):
-		Node(InNode), Indexes(InIndexes), MeshPath(InPath), Depths(Indepths), TargetCounter(0)
+	FLoadMeshesTask(ULoadMeshesAsyncAction* InNode, FString InPath, TArray<int32> InIndexes, float Indepth):
+		Node(InNode), Indexes(InIndexes), MeshPath(InPath), Depth(Indepth)
 	{
 	}
 

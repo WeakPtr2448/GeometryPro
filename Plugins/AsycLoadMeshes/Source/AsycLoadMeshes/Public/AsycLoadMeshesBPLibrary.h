@@ -30,24 +30,28 @@ class UAsycLoadMeshesBPLibrary : public UBlueprintFunctionLibrary
 	GENERATED_UCLASS_BODY()
 
 	//调用此函数，进行加载模型
+	// UFUNCTION(BlueprintCallable, Category = "AsycLoadMeshes")
+	// static void StartLoad(UObject* AsyncLoadMeshesActor,const FString& InPathName,const TArray<FString>& InIndexes,const FName& InFuncName);
+	//
+
 	UFUNCTION(BlueprintCallable, Category = "AsycLoadMeshes")
-	static void StartLoad(UObject* AsyncLoadMeshesActor,const FString& InPathName,const TArray<FString>& InIndexes,const FName& InFuncName);
+	static TArray<FStringAssetReference> GetAssetsPaths(const FString& Path);
 	
-	static void SetAssetsPaths(const TArray<FString>& Paths);
-
-	// static void Loading();
 	
-	//获得当前加载到的模型
-	UFUNCTION(BlueprintCallable, Category = "AsycLoadMeshes")
-	static TArray<UObject*> GetLoadedMeshes();
-
-	static TArray<UObject*> LoadedMeshes;
-	
-	static TSharedPtr<FStreamableHandle> GeometryHandle;
-	
-	static FStreamableManager* GeometryManager;
-
-	static TArray<FStringAssetReference> GeometryPaths;
+	//
+	// // static void Loading();
+	//
+	// //获得当前加载到的模型
+	// UFUNCTION(BlueprintCallable, Category = "AsycLoadMeshes")
+	// static TArray<UObject*> GetLoadedMeshes();
+	//
+	// static TArray<UObject*> LoadedMeshes;
+	//
+	// static TSharedPtr<FStreamableHandle> GeometryHandle;
+	//
+	// static FStreamableManager* GeometryManager;
+	//
+	// static TArray<FStringAssetReference> GeometryPaths;
 
 
 };
