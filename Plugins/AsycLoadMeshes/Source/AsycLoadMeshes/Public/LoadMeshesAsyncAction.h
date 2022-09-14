@@ -3,12 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CommonType.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
 #include "LoadMeshesAsyncAction.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnLoadingSignature,
-                                             UStaticMesh*, RiverMesh,
-                                             float, Depths);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnLoadingSignature,
+                                               UStaticMesh*, RiverMesh,
+                                               float, Depths,
+                                               UMaterialInterface*, MeshMat);
 
 /**
  * 
@@ -28,9 +30,7 @@ public:
 	UFUNCTION(BlueprintCallable, meta=(WorldContext="WorldContext"), Category="Load")
 	static ULoadMeshesAsyncAction* WaitForLoadMeshes(UObject* WorldContext,
 	                                                 FString InPath,
-	                                                 TArray<int32> Indexes,
-	                                                 TArray<float> Indepths);
-	
+	                                                 FMeshInfo MeshInfo);
 };
 
 class FLoadMeshesTask : public FNonAbandonableTask
@@ -42,13 +42,17 @@ class FLoadMeshesTask : public FNonAbandonableTask
 	TArray<int32> Indexes;
 	FString MeshPath;
 	TArray<FString> Paths;
-	
+	FStringAssetReference MaterialPath;
+
+	UMaterialInterface* MeshMat;
+
 	TArray<float> Depths;
 	UStaticMesh* LoadedMesh;
 
 
-	FLoadMeshesTask(ULoadMeshesAsyncAction* InNode, FString InPath, TArray<int32> InIndexes, TArray<float> Indepths):
-		Node(InNode), Indexes(InIndexes), MeshPath(InPath), Depths(Indepths)
+	FLoadMeshesTask(ULoadMeshesAsyncAction* InNode, FString InPath, FMeshInfo MeshInfo):
+		Node(InNode), Indexes(MeshInfo.Indexes), MeshPath(InPath),
+		MaterialPath(MeshInfo.MaterialPath), Depths(MeshInfo.Depths)
 	{
 	}
 

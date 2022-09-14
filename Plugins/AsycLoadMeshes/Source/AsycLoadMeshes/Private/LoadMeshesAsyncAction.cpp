@@ -3,22 +3,25 @@
 
 #include "LoadMeshesAsyncAction.h"
 
+
 ULoadMeshesAsyncAction* ULoadMeshesAsyncAction::WaitForLoadMeshes(UObject* WorldContext, FString InPath,
-                                                                  TArray<int32> Indexes,
-                                                                  TArray<float> Indepthes)
+                                                                  FMeshInfo MeshInfo)
 {
 	ULoadMeshesAsyncAction* Node = NewObject<ULoadMeshesAsyncAction>();
-	(new FAutoDeleteAsyncTask<FLoadMeshesTask>(Node, InPath, Indexes, Indepthes))->StartBackgroundTask();
+	(new FAutoDeleteAsyncTask<FLoadMeshesTask>(Node, InPath, MeshInfo))->StartBackgroundTask();
 	return Node;
 }
 
 void FLoadMeshesTask::DoWork()
 {
 	//StaticMesh'/Game/Geometries/meshId4057_name.meshId4057_name'
+
+	// AsyncTask(ENamedThreads::GameThread, [this]()
+	// {
+	// 	MeshMat = LoadObject<UMaterialInterface>(NULL, *MaterialPath.ToString());
+	// });
 	AsyncTask(ENamedThreads::GameThread, [this]()
 	{
-		// TArray<int32> CurrentIndexes;
-
 		for (int i = 0; i < Indexes.Num(); ++i)
 		{
 			FString FileName = FString("StaticMesh'")
@@ -30,25 +33,27 @@ void FLoadMeshesTask::DoWork()
 				+ FString::FromInt(Indexes[i])
 				+ FString("_name'");
 			Paths.Add(FileName);
+			UE_LOG(LogTemp, Warning, TEXT("@%u ,PathName=%s"), __LINE__,*Paths[i]);
 		}
+		return;
 		FPlatformProcess::Sleep(0.01f);
 		for (int i = 0; i < Paths.Num(); ++i)
 		{
 			const TCHAR* charFile = *Paths[i];
-			// // char* file = TCHAR_TO_UTF8(charFile);
+			// char* file = TCHAR_TO_UTF8(charFile);
 
-			UE_LOG(LogTemp, Warning, TEXT("@%u ,PathName=%s"), __LINE__,
-			       charFile);
+			UE_LOG(LogTemp, Warning, TEXT("@%u ,PathName=%s"), __LINE__,charFile);
 			if (i > 1)
 			{
 				LoadedMesh = LoadObject<UStaticMesh>(NULL, charFile);
-				Node->OnSuccess.Broadcast(LoadedMesh, Depths[i]);
+
+				Node->OnSuccess.Broadcast(LoadedMesh, Depths[i], MeshMat);
 			}
 			if (i == Paths.Num())
 			{
 				Paths.Empty();
 			}
 		}
-		Node->OnFailed.Broadcast(nullptr, {});
+		Node->OnFailed.Broadcast(nullptr, {}, MeshMat);
 	});
 }
